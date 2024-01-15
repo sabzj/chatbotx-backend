@@ -33,8 +33,8 @@ server.post("/api/message", async (req, res) => {
         },
         { role: "user", content: userMessage },
       ],
-      stream: true,
-      flush_interval: 1000,
+      // stream: true,
+      // flush_interval: 1000,
     });
 
     for (const chunk of response.stream) {
@@ -47,6 +47,36 @@ server.post("/api/message", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// from pini
+
+server.post("/generate-stream-text", async (req, res) => {
+  const openai = getOpenAiInstance();
+  try {
+    const stream = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      max_tokens: 100,
+      messages: [
+        {
+          role: "system",
+          content: `reply with info how the activity ${req.body.prompt} is useful to the society and the community`,
+        },
+        { role: "user", content: req.body.prompt },
+      ],
+      stream: false,
+    });
+
+    res.header("Content-Type", "text/plain");
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content || "";
+      res.write(content);
+    }
+    res.end();
+  } catch (e) {
+    res.status(500).send("Error generating stream text");
+  }
+});
+
 server.use(errorHandler);
 
 const PORT = process.env.PORT || 6000;
