@@ -16,7 +16,7 @@ server.use(express.json());
 server.use("/api/v1/activities", activityRoutes);
 server.use("/api/v1/users", userRoutes);
 
-app.post("/api/message", async (req, res) => {
+server.post("/api/message", async (req, res) => {
   const openai = getOpenAiInstance();
   try {
     const userMessage = req.body.message;
