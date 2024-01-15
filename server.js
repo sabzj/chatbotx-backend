@@ -29,7 +29,7 @@ server.post("/api/message", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: `reply with info how the activity ${req.body.activityName} is useful to the society and the community`,
+          content: `reply with info how the activity ${userMessage} is useful to the society and the community`,
         },
         { role: "user", content: userMessage },
       ],
