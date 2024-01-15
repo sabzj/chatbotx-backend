@@ -72,7 +72,7 @@ server.post("/generate-stream-text", async (req, res) => {
     //   res.write(content);
     // }
     // res.end();
-    res.send(stream);
+    res.send(stream.choices[0].message.content);
   } catch (e) {
     res.status(500).send("Error generating stream text");
   }
