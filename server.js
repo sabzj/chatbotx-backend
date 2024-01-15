@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import getOpenAiInstance from "./openAi.js";
@@ -67,11 +67,12 @@ server.post("/generate-stream-text", async (req, res) => {
     });
 
     res.header("Content-Type", "text/plain");
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || "";
-      res.write(content);
-    }
-    res.end();
+    // for await (const chunk of stream) {
+    //   const content = chunk.choices[0]?.delta?.content || "";
+    //   res.write(content);
+    // }
+    // res.end();
+    res.send(stream);
   } catch (e) {
     res.status(500).send("Error generating stream text");
   }
